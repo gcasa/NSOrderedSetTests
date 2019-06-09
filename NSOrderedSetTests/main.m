@@ -88,7 +88,17 @@ void runTests()
     passTest(result1 == YES,
              @"Sets do intersect!");
     
-    
+    id o1 = @"Hello";
+    id o2 = @"World";
+    mutableTest1 = [NSMutableOrderedSet orderedSet];
+    [mutableTest1 addObject:o1];
+    [testObjs addObject: mutableTest1];
+    mutableTest2 = [NSMutableOrderedSet orderedSet];
+    [mutableTest2 addObject:o2];
+    [testObjs addObject: mutableTest2];
+    [mutableTest1 unionOrderedSet:mutableTest2];
+    passTest(mutableTest1 != nil && mutableTest2 != nil && [mutableTest1 count] == 2,
+             @"mutableSets union properly");
     
     //test_NSObject(@"NSOrderedSet", testObjs);
     //test_NSCoding(testObjs);
