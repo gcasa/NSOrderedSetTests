@@ -100,6 +100,30 @@ void runTests()
     passTest(mutableTest1 != nil && mutableTest2 != nil && [mutableTest1 count] == 2,
              @"mutableSets union properly");
     
+    id o3 = @"Hello";
+    id o4 = @"World";
+    mutableTest1 = [NSMutableOrderedSet orderedSet];
+    [mutableTest1 addObject:o3];
+    [testObjs addObject: mutableTest1];
+    mutableTest2 = [NSMutableOrderedSet orderedSet];
+    [mutableTest2 addObject:o4];
+    [testObjs addObject: mutableTest2];
+    [mutableTest1 intersectOrderedSet:mutableTest2];
+    passTest(mutableTest1 != nil && mutableTest2 != nil && [mutableTest1 count] == 0,
+             @"mutableSets do not intersect");
+    
+    id o5 = @"Hello";
+    id o6 = @"Hello";
+    mutableTest1 = [NSMutableOrderedSet orderedSet];
+    [mutableTest1 addObject:o5];
+    [testObjs addObject: mutableTest1];
+    mutableTest2 = [NSMutableOrderedSet orderedSet];
+    [mutableTest2 addObject:o6];
+    [testObjs addObject: mutableTest2];
+    [mutableTest1 intersectOrderedSet:mutableTest2];
+    passTest(mutableTest1 != nil && mutableTest2 != nil && [mutableTest1 count] == 1,
+             @"mutableSets do intersect");
+    
     //test_NSObject(@"NSOrderedSet", testObjs);
     //test_NSCoding(testObjs);
     //test_NSCopying(@"NSOrderedSet", @"NSMutableOrderedSet", testObjs, YES, NO);
