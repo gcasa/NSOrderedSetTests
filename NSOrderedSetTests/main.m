@@ -196,6 +196,67 @@ void runTests()
     passTest([mutableTest3 isEqual:mutableTest1] == YES,
              @"Insert at index does not replace existing object");
     
+    NSMutableOrderedSet *mutableTest4 = [NSMutableOrderedSet orderedSet];
+    [mutableTest4 addObject:@"Now"];
+    [mutableTest4 addObject:@"is"];
+    [mutableTest4 addObject:@"the"];
+    [mutableTest4 addObject:@"time"];
+    [mutableTest4 addObject:@"for"];
+    [mutableTest4 addObject:@"all"];
+    [mutableTest4 addObject:@"Good"];
+    [mutableTest4 addObject:@"men"];
+    [mutableTest4 addObject:@"to"];
+    [mutableTest4 addObject:@"come"];
+    [mutableTest4 addObject:@"to the aid"];
+    [mutableTest4 addObject:@"of their country"];
+    [mutableTest4 moveObjectsAtIndexes:[NSIndexSet indexSetWithIndex:3] toIndex:10];
+    [testObjs addObject: mutableTest4];
+    passTest([[mutableTest4 objectAtIndex: 10] isEqual:@"time"] == YES,
+             @"Move to index moves to correct index");
+    
+    NSMutableOrderedSet *mutableTest5 = [NSMutableOrderedSet orderedSet];
+    [mutableTest5 addObject:@"Now"];
+    [mutableTest5 addObject:@"is"];
+    [mutableTest5 addObject:@"the"];
+    [mutableTest5 exchangeObjectAtIndex:0 withObjectAtIndex:2];
+    passTest([[mutableTest5 objectAtIndex: 0] isEqual:@"the"] == YES &&
+             [[mutableTest5 objectAtIndex: 2] isEqual:@"Now"] == YES,
+             @"Exchanges indexes properly");
+    
+    mutableTest4 = [NSMutableOrderedSet orderedSet];
+    [mutableTest4 addObject:@"Now"];
+    [mutableTest4 addObject:@"is"];
+    [mutableTest4 addObject:@"the"];
+    [mutableTest4 addObject:@"time"];
+    [mutableTest4 addObject:@"for"];
+    [mutableTest4 addObject:@"all"];
+    [mutableTest4 addObject:@"Good"];
+    [mutableTest4 addObject:@"men"];
+    [mutableTest4 addObject:@"to"];
+    [mutableTest4 addObject:@"come to"];
+    [mutableTest4 addObject:@"the aid"];
+    [mutableTest4 addObject:@"of their country"];
+    NSMutableIndexSet *is = [NSMutableIndexSet indexSetWithIndex:6];
+    [is addIndex: 9];
+    NSMutableArray *array = [NSMutableArray arrayWithObjects:@"Horrible", @"Flee From", nil];
+    [mutableTest4 replaceObjectsAtIndexes: is
+                              withObjects: array];
+    [testObjs addObject: mutableTest4];
+    passTest([[mutableTest4 objectAtIndex: 9] isEqual:@"Flee From"] == YES,
+             @"replaceObjectsAtIndexes: adds to correct indexes");
+    
+    
+    
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:mutableTest4];
+    BOOL flag = [data writeToFile:@"output.data" atomically:YES];
+    if (!flag)
+    {
+        NSLog(@"Error writing");
+    }
+    
+    // NSLog(@"RESULT: %@",mutableTest4);
+    
     //test_NSObject(@"NSOrderedSet", testObjs);
     //test_NSCoding(testObjs);
     //test_NSCopying(@"NSOrderedSet", @"NSMutableOrderedSet", testObjs, YES, NO);
