@@ -246,6 +246,11 @@ void runTests()
              @"replaceObjectsAtIndexes: adds to correct indexes");
     
     
+    NSUInteger index =  [mutableTest4 indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj isEqualToString:@"Horrible"];
+    }];
+    // NSLog(@"Index = %d", index);
+    passTest(index == 6, @"Found correct index");
     
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:mutableTest4];
