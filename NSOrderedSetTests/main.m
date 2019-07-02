@@ -249,9 +249,39 @@ void runTests()
     NSUInteger index =  [mutableTest4 indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         return [obj isEqualToString:@"Horrible"];
     }];
-    // NSLog(@"Index = %d", index);
-    passTest(index == 6, @"Found correct index");
+    passTest(index == 6, @"Returns correct index");
     
+    NSIndexSet *indexes = [mutableTest4 indexesOfObjectsPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj isEqualToString:@"Horrible"] || [obj isEqualToString:@"Flee From"];
+    }];
+    NSLog(@"indexes = %@",indexes);
+    passTest([indexes containsIndex:6] && [indexes containsIndex:9], @"Returns correct indexes");
+    // NSLog(@"Index = %d", index);
+
+    indexes = [mutableTest4
+               indexesOfObjectsWithOptions:0
+                                passingTest:^BOOL(id  _Nonnull obj, NSUInteger  idx, BOOL * _Nonnull stop) {
+                                return [obj isEqualToString:@"Horrible"] || [obj isEqualToString:@"Flee From"];
+                }];
+    NSLog(@"indexes = %@",indexes);
+    passTest([indexes containsIndex:6] && [indexes containsIndex:9], @"Returns correct indexes");
+
+    index = [mutableTest4 indexOfObjectAtIndexes:[NSIndexSet indexSetWithIndex: 6]
+                                 options:0
+                             passingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                 return [obj isEqualToString:@"Horrible"];
+                             }];
+    passTest(index == 6, @"indexOfObjectAtIndexes:... Returns correct index");
+    
+    NSMutableIndexSet *ixs = [NSMutableIndexSet indexSetWithIndex:6];
+    [ixs addIndex: 9];
+    indexes = [mutableTest4 indexesOfObjectsAtIndexes: ixs
+                                              options:0
+                                     passingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                         return [obj isEqualToString:@"Horrible"] || [obj isEqualToString:@"Flee From"];
+                                     }];
+    NSLog(@"indexes = %@",indexes);
+    passTest([indexes containsIndex:6] && [indexes containsIndex:9], @"indexesOfObjects... Returns correct indexes");
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:mutableTest4];
     BOOL flag = [data writeToFile:@"output.data" atomically:YES];
